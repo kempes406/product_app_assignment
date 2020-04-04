@@ -2,12 +2,8 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpClient\HttpClient;
 
 /**
  * @Route("/sales")
@@ -22,26 +18,24 @@ class SalesController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function listAction()
+    public function fixListAction()
     {
         $content = file_get_contents('potato_sales.json');
         $sales = json_decode($content, true);
-//        dump($sales);
 
-        return $this->render('sales.html.twig',[
+        return $this->render('sales_fixed_loading.html.twig',[
             'columns' => $sales['column'],
             'products' => $sales['data']
         ]);
     }
 
     /**
-     * @Route("/fetch", name="sales.fetch", methods={"GET"})
+     * @Route("/list/dynamic", name="sales.list.dynamic")
      *
-     * @return JsonResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function fetchAction()
+    public function AjaxlistAction()
     {
-        $content = file_get_contents('potato_sales.json');
-        return JsonResponse::fromJsonString($content);
+        return $this->render('sales.html.twig');
     }
 }

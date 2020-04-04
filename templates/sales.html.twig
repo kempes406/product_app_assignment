@@ -1,41 +1,64 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                type: "GET",
+                url: '/api/sales',
+                dataType: 'json',
+                success: function (data) {
+                    //                $("#results").html(msg);
+                    console.log(data);
+                    let resultHtml = '<table class=\"table table-striped table-bordered table-hover table-checkable\" id=\"listingTable\">'
+                    // compute header
+                    resultHtml += '<tr>'
+                    data.column.forEach((item) => {
+                        if (typeof item.subHeaders != 'undefined') {
+                            resultHtml += '<td colspan="'+ item.subHeaders.length +'" class="text-center">'+ item.header + '</td>'
+                        } else {
+                            resultHtml += '<td rowspan="2" class="text-center">'+ item.header + '</td>'
+                        }
+                    })
+                    resultHtml += '</tr>'
+                    resultHtml += '<tr>'
+
+                    data.column.forEach((item) => {
+                        if (typeof item.subHeaders != 'undefined') {
+                            item.subHeaders.forEach((subheader) => {
+                                resultHtml += '<td>' + subheader.header + '</td>'
+                            })
+                        }
+                    })
+
+                    resultHtml += '</tr>'
+                    // products
+                    resultHtml += '<tr>'
+                    data.data.forEach((product) => {
+                        resultHtml += '<tr>'
+                        let productTotal = product.salesQ2 + product.salesQ2 + product.salesQ3 + product.salesQ4;
+                        resultHtml += '<td>' + product.productID + '</td>'
+                        resultHtml += '<td>' + product.productName + '</td>'
+                        resultHtml += '<td>' + product.salesQ1 + '</td>'
+                        resultHtml += '<td>' + product.salesQ2 + '</td>'
+                        resultHtml += '<td>' + product.salesQ3 + '</td>'
+                        resultHtml += '<td>' + product.salesQ4 + '</td>'
+                        resultHtml += '<td>' + productTotal + '</td>'
+                        resultHtml += '</tr>'
+                    })
+                    resultHtml += '</tbody></table>'
+
+                    $("#results").html(resultHtml);
+                }
+            })
+        })
+    </script>
+{% endblock %}
+
 {% block title %}Sales{% endblock title %}
 
 {% block body %}
-
-    <table class="table table-striped table-bordered table-hover table-checkable" id="listingTable">
-        <tr>
-            {% for item in columns %}
-                {% if item.subHeaders is defined %}
-                    <th colspan="{{ item.subHeaders|length }}" class="text-center">{{ item.header }}</th>
-                {% else %}
-                    <th rowspan="2">{{ item.header }}</th>
-                {% endif %}
-            {% endfor %}
-        </tr>
-        <tr>
-            {% for item in columns %}
-                {% if item.subHeaders is defined %}
-                        {% for subheader in item.subHeaders %}
-                            <th>{{ subheader.header }}</th>
-                        {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </tr>
-        {% for product in products %}
-            {% set productSales = [product.salesQ1, product.salesQ2, product.salesQ3, product.salesQ4] %}
-            <tr>
-                <td>{{ product.productID }}</td>
-                <td>{{ product.productName }}</td>
-                <td>{{ product.salesQ1 }}</td>
-                <td>{{ product.salesQ2 }}</td>
-                <td>{{ product.salesQ3 }}</td>
-                <td>{{ product.salesQ4 }}</td>
-                <td>{{ productSales|reduce((carry, v) => carry + v) }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+    <div id="results"></div>
 {% endblock %}
+

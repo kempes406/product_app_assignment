@@ -4,6 +4,7 @@ security:
             memory:
                 users:
                     admin: { password: '$argon2id$v=19$m=65536,t=4,p=1$yBB2WpA80b0FShNFlmfNyA$Q2Mt0r+R7mG4geahdHRTmGaFJyNeEr4tZLs5csv1CbM', roles: ['ROLE_USER'] }
+                    test_user: { password: '$argon2id$v=19$m=65536,t=4,p=1$yBB2WpA80b0FShNFlmfNyA$Q2Mt0r+R7mG4geahdHRTmGaFJyNeEr4tZLs5csv1CbM', roles: ['ROLE_USER'] }
     encoders:
          Symfony\Component\Security\Core\User\User: 'auto'
     firewalls:
@@ -33,3 +34,4 @@ security:
     access_control:
          - { path: ^/product, roles: IS_AUTHENTICATED_REMEMBERED }
          - { path: ^/sales, roles: IS_AUTHENTICATED_REMEMBERED }
+

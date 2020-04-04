@@ -3,7 +3,11 @@
 {% block body %}
     <h4> Sales products app</h4>
     <br/>
-    <a href="/product/add">Add Product</a>
-    <br/>
-    <a href="/sales/list">Sales</a>
+    {% if is_granted('ROLE_USER') %}
+        <a href="/product/add">Add Product</a>
+        <br/>
+        <a href="/sales/list">Sales</a>
+        <br/>
+        <a href="/sales/list/dynamic">Sales throwgh API call</a>
+    {% endif %}
 {% endblock %}
