@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sales{% endblock title %}
+
+{% block body %}
+
+    <table class="table table-striped table-bordered table-hover table-checkable" id="listingTable">
+        <tr>
+            {% for item in columns %}
+                {% if item.subHeaders is defined %}
+                    <th colspan="{{ item.subHeaders|length }}" class="text-center">{{ item.header }}</th>
+                {% else %}
+                    <th rowspan="2">{{ item.header }}</th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for item in columns %}
+                {% if item.subHeaders is defined %}
+                        {% for subheader in item.subHeaders %}
+                            <th>{{ subheader.header }}</th>
+                        {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% for product in products %}
+            {% set productSales = [product.salesQ1, product.salesQ2, product.salesQ3, product.salesQ4] %}
+            <tr>
+                <td>{{ product.productID }}</td>
+                <td>{{ product.productName }}</td>
+                <td>{{ product.salesQ1 }}</td>
+                <td>{{ product.salesQ2 }}</td>
+                <td>{{ product.salesQ3 }}</td>
+                <td>{{ product.salesQ4 }}</td>
+                <td>{{ productSales|reduce((carry, v) => carry + v) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

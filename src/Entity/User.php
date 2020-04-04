@@ -58,14 +58,6 @@ class User
         return $this->roles;
     }
 
-    /**
-     * @param array $roles
-     */
-    public function setRoles(array $roles): void
-    {
-        $this->roles = $roles;
-    }
-
     public function getPassword()
     {
         return $this->password;
@@ -90,22 +82,6 @@ class User
     public function setEmail($email): void
     {
         $this->email = $email;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFullName()
-    {
-        return $this->fullName;
-    }
-
-    /**
-     * @param mixed $fullName
-     */
-    public function setFullName($fullName): void
-    {
-        $this->fullName = $fullName;
     }
 
     /**
