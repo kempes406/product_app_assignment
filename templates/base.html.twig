@@ -2,11 +2,54 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <link rel="stylesheet"
+                  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+                  integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+                  crossorigin="anonymous">
+        {% endblock %}
     </head>
-    <body>
+    <body class="bg-light">
+
+    <nav class="navbar navbar-dark navbar-expand-md sticky-top bg-dark p-0">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0"
+           href="{{ path('_index') }}">Index</a>
+        <div class="w-100 order-1 order-md-0"></div>
+        <div class="order-2 order-md-1">
+            <ul class="navbar-nav px-3">
+                {% if is_granted('ROLE_USER') %}
+                    <li class="nav-item text-nowrap border-right border-secondary">
+                    </li>
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link"
+                           href="#">{{ app.user.fullName }}</a>
+                    </li>
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link"
+                           href="{{ logout_path() }}">{{ 'Sign out'|trans }}</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link"
+                           href="{{ path('security_login') }}">{{ 'Sign in'|trans }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <main role="main" class="container main">
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    </main><!-- /.container -->
+
+    {% block javascripts %}{% endblock %}
     </body>
 </html>
