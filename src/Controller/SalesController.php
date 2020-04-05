@@ -34,7 +34,7 @@ class SalesController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function AjaxlistAction()
+    public function DynamicListAction()
     {
         return $this->render('sales.html.twig');
     }

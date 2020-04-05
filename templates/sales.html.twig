@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block javascripts %}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="{{ asset('script/jquery-3.4.1.min.js') }}"></script>
     <script>
-        function fetchData(orderBy){
+        function fetchData(orderBy, orderType){
+            console.log(orderBy, orderType);
             $.ajax({
                 type: "GET",
                 url: '/api/sales',
                 dataType: 'json',
                 success: function (data) {
-                    console.log(orderBy);
-                    let resultHtml = '<table class=\"table table-striped table-bordered table-hover table-checkable\" id=\"listingTable\">'
+                    let resultHtml = '<table class=\"table table-striped table-bordered table-hover table-checkable\" id=\"salesTable\">'
                     // compute header
                     resultHtml += '<tr>'
                     data.column.forEach((item) => {
@@ -18,7 +18,8 @@
                             resultHtml += '<td colspan="'+ item.subHeaders.length +'" class="text-center">'+ item.header + '</td>'
                         } else {
                             let index = item.field ? item.field : 'total'
-                            resultHtml += '<td rowspan="2" class="text-center"><a href="#" onclick="fetchData(\''+ index +'\')">'+ item.header + ' </a></td>'
+                            resultHtml += '<td rowspan="2" class="text-center"><a href="#" onclick="fetchData(\''+ index +'\', \'desc\')"><img src="{{ asset('svg/arrow-top.svg') }}" alt="DESC"></a>'
+                            resultHtml += item.header + '<a href="#" onclick="fetchData(\''+ index +'\', \'asc\')"><img src="{{ asset('svg/arrow-bottom.svg') }}" alt="ASC"></a></td>'
                         }
                     })
                     resultHtml += '</tr>'
@@ -27,7 +28,8 @@
                     data.column.forEach((item) => {
                         if (typeof item.subHeaders != 'undefined') {
                             item.subHeaders.forEach((subheader) => {
-                                resultHtml += '<td><a href="#" onclick="fetchData(\''+ subheader.field +'\')">' + subheader.header + '</a></td>'
+                                resultHtml += '<td><a href="#" onclick="fetchData(\''+ subheader.field +'\', \'desc\')"><img src="{{ asset('svg/arrow-top.svg') }}" alt="DESC"></a>'
+                                resultHtml += subheader.header + '<a href="#" onclick="fetchData(\''+ subheader.field +'\', \'asc\')"><img src="{{ asset('svg/arrow-bottom.svg') }}" alt="DESC"></a></td>'
                             })
                         }
                     })
@@ -35,14 +37,17 @@
                     resultHtml += '</tr>'
                     // products
                     resultHtml += '<tr>'
-
                     let products = data.data.map((product) => {
                         product.total = product.salesQ2 + product.salesQ2 + product.salesQ3 + product.salesQ4;
                         return product;
                     })
 
                     if (typeof orderBy != 'undefined') {
-                        products.sort((a, b) => (a[orderBy] > b[orderBy]) ? 1 : -1)
+                        if (orderType == 'asc') {
+                            products.sort((a, b) => (a[orderBy] > b[orderBy]) ? 1 : -1)
+                        } else {
+                            products.sort((a, b) => (a[orderBy] < b[orderBy]) ? 1 : -1)
+                        }
                     }
 
                     products.forEach((product) => {

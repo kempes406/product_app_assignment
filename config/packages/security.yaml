@@ -3,8 +3,8 @@ security:
        backend_users:
             memory:
                 users:
-                    admin: { password: '$argon2id$v=19$m=65536,t=4,p=1$yBB2WpA80b0FShNFlmfNyA$Q2Mt0r+R7mG4geahdHRTmGaFJyNeEr4tZLs5csv1CbM', roles: ['ROLE_USER'] }
-                    test_user: { password: '$argon2id$v=19$m=65536,t=4,p=1$yBB2WpA80b0FShNFlmfNyA$Q2Mt0r+R7mG4geahdHRTmGaFJyNeEr4tZLs5csv1CbM', roles: ['ROLE_USER'] }
+                    admin: { password: '$argon2id$v=19$m=65536,t=4,p=1$V5FKomNxWf4MbNb2d4AMfQ$mAWm5brKdsoR4osO/cEpoq6U1phERxwnHa1N6iRLzrA', roles: ['ROLE_USER','ROLE_ADMIN'] }
+                    test_user: { password: '$argon2id$v=19$m=65536,t=4,p=1$V5FKomNxWf4MbNb2d4AMfQ$mAWm5brKdsoR4osO/cEpoq6U1phERxwnHa1N6iRLzrA', roles: ['ROLE_USER'] }
     encoders:
          Symfony\Component\Security\Core\User\User: 'auto'
     firewalls:
@@ -35,3 +35,5 @@ security:
          - { path: ^/product, roles: IS_AUTHENTICATED_REMEMBERED }
          - { path: ^/sales, roles: IS_AUTHENTICATED_REMEMBERED }
 
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
