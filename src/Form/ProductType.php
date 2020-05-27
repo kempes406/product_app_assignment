@@ -35,7 +35,6 @@ class ProductType extends AbstractType
             ])
             ->add('salesStartDate',  DateType::class, [
                 'label'    => 'Sales start date',
-                'constraints' => [new Assert\Length(['max' => 10])],
                 'required' => true
             ])
             ->add('submit', SubmitType::class, [

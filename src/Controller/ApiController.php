@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/api")
@@ -15,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ApiController extends AbstractController
 {
     /**
+     * @Security("is_granted('ROLE_USER')")
      * @Route("/sales", name="api.sales.get", methods={"GET"})
      *
      * @return JsonResponse
